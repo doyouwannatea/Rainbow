@@ -22,33 +22,23 @@ const App = () => {
       setIsLoading(true)
       navigator.geolocation.getCurrentPosition(({ coords }) => {
         // WeatherService.fetchWeatherByCoords(coords.latitude, coords.longitude)
-        //   .then(list => {
-        //     setWeatherList(list)
-        //   })
-        //   .catch(() => {
-        //     setError({
-        //       isError: true,
-        //       message: 'Ошибка'
-        //     })
-        //   })
-        //   .finally(() => {
-        //     setIsLoading(false)
-        //   })
+        //   .then(list => setWeatherList(list))
+        //   .catch(() => onError('Введите город вручную.'))
+        //   .finally(() => setIsLoading(false))
         setWeatherList(dummyWeather)
         setIsLoading(false)
 
-      }, onGeolocationError)
+      }, () => onError('Геолокация недоступна, введите город вручную.'))
     } else {
-      onGeolocationError()
+      onError('Геолокация недоступна, введите город вручную.')
     }
   }, [])
 
-  const onGeolocationError = () => {
+  const onError = (message: string) => {
     setError({
       isError: true,
-      message: 'Включите геолокацию для определия местоположения, или введите его вручную'
+      message
     })
-    setIsLoading(false)
   }
 
   const resetError = () => {
@@ -64,30 +54,21 @@ const App = () => {
       resetError()
       setIsLoading(true)
       WeatherService.fetchWeatherByCity(city)
-        .then(list => {
-          setWeatherList(list)
-        })
+        .then(list => setWeatherList(list))
         .catch(err => {
-          if (err.message === '404') {
-            setError({
-              isError: true,
-              message: 'Город не найден'
-            })
-          } else if (err.message === '429') {
-            setError({
-              isError: true,
-              message: 'Слишком много запросов'
-            })
-          } else {
-            setError({
-              isError: true,
-              message: 'Ошибка'
-            })
+          switch (err.message) {
+            case '404':
+              onError('Город не найден.')
+              break
+            case '429':
+              onError('Слишком много запросов в минуту.')
+              break
+            default:
+              onError('Ошибка сети или сервера.')
+              break
           }
         })
-        .finally(() => {
-          setIsLoading(false)
-        })
+        .finally(() => setIsLoading(false))
     }
   }
 

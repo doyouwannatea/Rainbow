@@ -1,8 +1,17 @@
-import ErrorIcon from '@material-ui/icons/Error'
+import React from 'react'
 
-const Error = () => {
+import { Alert, AlertTitle } from '@material-ui/lab';
+
+type Props = {
+    message: string
+}
+
+const Error: React.FC<Props> = ({ message }) => {
     return (
-        <ErrorIcon />
+        <Alert severity="error">
+            <AlertTitle>Ошибка</AlertTitle>
+            {message}
+        </Alert>
     )
 }
 

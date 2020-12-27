@@ -1,6 +1,7 @@
 import React from 'react'
 import { IError, IWeatherData } from '../types'
 import Error from './Error'
+import Loader from './Loader'
 
 import WeatherItem from './WeatherItem'
 
@@ -13,11 +14,11 @@ type Props = {
 const WeatherList: React.FC<Props> = ({ weatherList, error, isLoading }) => {
 
     if (error.isError) {
-        return <Error />
+        return <Error message={error.message} />
     }
 
     if (isLoading) {
-        return <div>Загрузка...</div>
+        return <Loader />
     }
 
     return (
