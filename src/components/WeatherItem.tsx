@@ -9,32 +9,35 @@ import {
     CardContent,
     Typography
 } from "@material-ui/core"
+import { IWeatherData } from '../types'
 
 const useStyles = makeStyles({
     root: {
-        borderRadius: 0
+        borderRadius: 0,
+        marginBottom: 1
     },
-    weatherIcon: {
+    weatherIconWrapper: {
         display: 'flex',
         alignItems: 'center',
         marginLeft: 'auto',
         marginRight: '1rem',
-        fontFamily: '"Weather&Time"',
-        fontSize: '4em'
+    },
+    weatherIcon: {
+        width: 75,
+        height: 75
     },
     temp: {
+        minWidth: 40,
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column'
     }
 })
 
-type Props = {
-    day: string
-    icon: string
-}
 
-const WeatherItem: React.FC<Props> = ({ day, icon }) => {
+type Props = {} & IWeatherData
+    
+const WeatherItem: React.FC<Props> = ({ day, icon, main, temp }) => {
     const classes = useStyles()
 
     return (
@@ -47,23 +50,22 @@ const WeatherItem: React.FC<Props> = ({ day, icon }) => {
                                 {day}
                             </Typography>
                             <Typography variant="subtitle1" component="div">
-                                Rain
+                                {main}
                             </Typography>
                         </Grid>
-                        <Grid item className={classes.weatherIcon}>
-                            {icon}
+                        <Grid item className={classes.weatherIconWrapper}>
+                            <img src={`http://openweathermap.org/img/wn/${icon}@4x.png`} alt={main} className={classes.weatherIcon} />
                         </Grid>
                         <Grid item className={classes.temp}>
                             <Typography variant="subtitle2" component="div">
-                                -11°С
+                                {temp.tempMin}°С
                             </Typography>
                             <Typography variant="subtitle2" component="div">
-                                -21°С
+                                {temp.tempMax}°С
                             </Typography>
                         </Grid>
                     </Grid>
                 </CardContent>
-                <Divider />
             </CardActionArea>
         </Card>
     )

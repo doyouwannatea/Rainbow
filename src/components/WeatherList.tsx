@@ -1,24 +1,29 @@
 import React from 'react'
+import { IError, IWeatherData } from '../types'
+import Error from './Error'
 
 import WeatherItem from './WeatherItem'
 
-const WeatherList = () => {
-    const makeCards = () => {
-        const cards = []
-        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        const daysIcons = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+type Props = {
+    weatherList: IWeatherData[]
+    isLoading: boolean
+    error: IError
+}
 
-        for (let i = 0; i < 7; i++) {
-            cards.push(<WeatherItem key={i} icon={daysIcons[i]} day={days[i]}/>)
-        }
+const WeatherList: React.FC<Props> = ({ weatherList, error, isLoading }) => {
 
-        return cards
+    if (error.isError) {
+        return <Error />
+    }
+
+    if (isLoading) {
+        return <div>Загрузка...</div>
     }
 
     return (
         <>
             {
-                makeCards()
+                weatherList.map(day => <WeatherItem key={day.dt} {...day} />)
             }
         </>
     )

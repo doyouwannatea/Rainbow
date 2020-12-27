@@ -1,8 +1,3 @@
-@font-face {
-  font-family: "Weather&Time";
-  src: url("./fonts/Weather&Time.ttf");
-}
-
 body {
   margin: 0;
   padding-top: 64px;

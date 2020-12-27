@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { makeStyles, fade } from '@material-ui/core/styles';
 import { Menu, Search } from '@material-ui/icons';
@@ -64,10 +64,16 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {
     toggleNavbar: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void
+    setWeatherByCityName: (city: string) => (e: React.FormEvent) => void
 }
 
-const Header: React.FC<Props> = ({ toggleNavbar }) => {
+const Header: React.FC<Props> = ({ toggleNavbar, setWeatherByCityName }) => {
+    const [cityName, setCityName] = useState('')
     const classes = useStyles()
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setCityName(e.target.value)
+    }
 
     return (
         <div className={classes.root}>
@@ -80,14 +86,18 @@ const Header: React.FC<Props> = ({ toggleNavbar }) => {
                         <div className={classes.searchIcon}>
                             <Search />
                         </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
+                        <form onSubmit={setWeatherByCityName(cityName)}>
+                            <InputBase
+                                onChange={onChange}
+                                value={cityName}
+                                placeholder="Search…"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput,
+                                }}
+                                inputProps={{ 'aria-label': 'search' }}
+                            />
+                        </form>
                     </div>
                     <Typography variant="h6" className={classes.title}>
                         News
