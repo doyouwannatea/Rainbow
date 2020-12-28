@@ -2,12 +2,11 @@ import React from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import {
-    Divider,
     Grid,
     Card,
     CardActionArea,
     CardContent,
-    Typography
+    Typography,
 } from "@material-ui/core"
 import { IWeatherData } from '../types'
 
@@ -19,25 +18,28 @@ const useStyles = makeStyles({
     weatherIconWrapper: {
         display: 'flex',
         alignItems: 'center',
-        marginLeft: 'auto',
         marginRight: '1rem',
     },
     weatherIcon: {
-        width: 75,
-        height: 75
+        width: 70,
+        height: 70,
     },
     temp: {
-        minWidth: 40,
+        minWidth: 50,
         display: 'flex',
         justifyContent: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        marginLeft: 'auto',
+        '& > div': {
+            fontWeight: 100
+        }
     }
 })
 
 
 type Props = {} & IWeatherData
-    
-const WeatherItem: React.FC<Props> = ({ day, icon, main, temp }) => {
+
+const WeatherItem: React.FC<Props> = ({ day, icon, description, temp }) => {
     const classes = useStyles()
 
     return (
@@ -45,23 +47,20 @@ const WeatherItem: React.FC<Props> = ({ day, icon, main, temp }) => {
             <CardActionArea>
                 <CardContent>
                     <Grid container>
+                        <Grid item className={classes.weatherIconWrapper}>
+                            <img src={`http://openweathermap.org/img/wn/${icon}@4x.png`} alt={description} className={classes.weatherIcon} />
+                        </Grid>
                         <Grid item>
                             <Typography variant="h5" component="div">
                                 {day}
                             </Typography>
                             <Typography variant="subtitle1" component="div">
-                                {main}
+                                {description}
                             </Typography>
-                        </Grid>
-                        <Grid item className={classes.weatherIconWrapper}>
-                            <img src={`http://openweathermap.org/img/wn/${icon}@4x.png`} alt={main} className={classes.weatherIcon} />
                         </Grid>
                         <Grid item className={classes.temp}>
-                            <Typography variant="subtitle2" component="div">
-                                {temp.tempMin}°С
-                            </Typography>
-                            <Typography variant="subtitle2" component="div">
-                                {temp.tempMax}°С
+                            <Typography variant="h4" component="div">
+                                {temp.temp}°С
                             </Typography>
                         </Grid>
                     </Grid>

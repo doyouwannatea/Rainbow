@@ -1,7 +1,7 @@
 import { IWeatherData, WeatherData } from '../types';
 
 class WeatherService {
-    private static BASE_URL: string = 'https://community-open-weather-map.p.rapidapi.com/forecast?units=metric&'
+    private static BASE_URL: string = 'https://community-open-weather-map.p.rapidapi.com/forecast?lang=ru&units=metric&'
 
     private static async fetchWeather(query: string) {
         const res = await fetch(this.BASE_URL + query, {

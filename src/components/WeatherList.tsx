@@ -22,11 +22,11 @@ const WeatherList: React.FC<Props> = ({ weatherList, error, isLoading }) => {
     }
 
     return (
-        <>
+        <div className="weather-wrapper">
             {
-                weatherList.map(day => <WeatherItem key={day.dt} {...day} />)
+                weatherList.map(day => <WeatherItem key={day.dtText} {...day} />)
             }
-        </>
+        </div>
     )
 }
 export default WeatherList

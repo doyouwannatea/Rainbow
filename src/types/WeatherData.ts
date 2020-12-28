@@ -1,20 +1,22 @@
 import { ITemperature, IWeatherData } from "."
 
 export default class WeatherData implements IWeatherData {
-    static WEEK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    dt: string
+    static WEEK_DAYS = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+    dtText: string
     day: string
     icon: string
-    main: string
+    description: string
     temp: ITemperature
 
     constructor(dayObj: any) {
-        this.dt = dayObj.dt_txt
-        this.day = this.getWeekDay(this.dt)
-        this.icon = dayObj.weather[0].icon
-        this.main = dayObj.weather[0].main
+        const { icon, description } = dayObj.weather[0]
+
+        this.dtText = dayObj.dt_txt
+        this.day = this.getWeekDay(this.dtText)
+        this.icon = icon.slice(0, icon.length - 1) + 'd'
+        this.description = description
         this.temp = {
-            temp: Math.round(dayObj.main.feels_like),
+            temp: Math.round(dayObj.main.temp),
             tempMin: Math.round(dayObj.main.temp_min),
             tempMax: Math.round(dayObj.main.temp_max)
         }

@@ -5,7 +5,6 @@ import WeatherList from "./WeatherList"
 import Navbar from "./Navbar"
 
 import WeatherService from '../apis/WeatherService'
-import dummyWeather from '../dummyWeather'
 
 import { IError, IWeatherData } from '../types'
 
@@ -21,13 +20,10 @@ const App = () => {
     if (navigator.geolocation) {
       setIsLoading(true)
       navigator.geolocation.getCurrentPosition(({ coords }) => {
-        // WeatherService.fetchWeatherByCoords(coords.latitude, coords.longitude)
-        //   .then(list => setWeatherList(list))
-        //   .catch(() => onError('Введите город вручную.'))
-        //   .finally(() => setIsLoading(false))
-        setWeatherList(dummyWeather)
-        setIsLoading(false)
-
+        WeatherService.fetchWeatherByCoords(coords.latitude, coords.longitude)
+          .then(list => setWeatherList(list))
+          .catch(() => onError('Введите город вручную.'))
+          .finally(() => setIsLoading(false))
       }, () => onError('Геолокация недоступна, введите город вручную.'))
     } else {
       onError('Геолокация недоступна, введите город вручную.')

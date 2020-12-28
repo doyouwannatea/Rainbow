@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: '1rem'
+        marginTop: '35vh'
     }
 }))
 

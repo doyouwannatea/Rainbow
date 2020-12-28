@@ -7,10 +7,10 @@ export interface ITemperature {
 }
 
 export interface IWeatherData {
-    dt: string
+    dtText: string
     day: string
     icon: string
-    main: string
+    description: string
     temp: ITemperature
 }
 
