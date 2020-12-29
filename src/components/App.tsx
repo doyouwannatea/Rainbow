@@ -21,10 +21,10 @@ const App = () => {
       setIsLoading(true)
       navigator.geolocation.getCurrentPosition(({ coords }) => {
         WeatherService.fetchWeatherByCoords(coords.latitude, coords.longitude)
-          .then(list => setWeatherList(list))
-          .catch(() => onError('Введите город вручную.'))
+          .then(setWeatherList)
+          .catch(catchWeatherAPIError)
           .finally(() => setIsLoading(false))
-      }, () => onError('Геолокация недоступна, введите город вручную.'))
+      }, catchPositionError)
     } else {
       onError('Геолокация недоступна, введите город вручную.')
     }
@@ -44,26 +44,42 @@ const App = () => {
     })
   }
 
+  const catchPositionError = (err: GeolocationPositionError) => {
+    switch (err.code) {
+      case 1:
+        onError('Геолокация выключена, введите местоположение вручную.')
+        break
+      case 2:
+        onError('Не удалось получить геолокацию.')
+        break
+      default:
+        onError('Ошибка сети или сервера.')
+        break
+    }
+  }
+
+  const catchWeatherAPIError = (err: Error) => {
+    switch (err.message) {
+      case '404':
+        onError('Город не найден.')
+        break
+      case '429':
+        onError('Слишком много запросов в минуту.')
+        break
+      default:
+        onError('Ошибка сети или сервера.')
+        break
+    }
+  }
+
   const setWeatherByCityName = (city: string) => (e: React.FormEvent) => {
     e.preventDefault()
     if (city.length > 0) {
       resetError()
       setIsLoading(true)
-      WeatherService.fetchWeatherByCity(city)
-        .then(list => setWeatherList(list))
-        .catch(err => {
-          switch (err.message) {
-            case '404':
-              onError('Город не найден.')
-              break
-            case '429':
-              onError('Слишком много запросов в минуту.')
-              break
-            default:
-              onError('Ошибка сети или сервера.')
-              break
-          }
-        })
+      WeatherService.fetchWeatherByCityName(city)
+        .then(setWeatherList)
+        .catch(catchWeatherAPIError)
         .finally(() => setIsLoading(false))
     }
   }

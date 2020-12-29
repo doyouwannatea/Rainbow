@@ -11,16 +11,17 @@ class WeatherService {
             }
         })
 
-        const weatherData = await res.json()
-        console.log(weatherData)
-        if (weatherData.message === 'city not found') {
-            throw new Error('404')
-        }
-        if (weatherData.message === 'You have exceeded the rate limit per minute for your plan, BASIC, by the API provider') {
-            throw new Error('429')
+        if (res.ok) {
+            const weatherData = await res.json()
+            console.log(weatherData)
+            return weatherData
         }
 
-        return weatherData
+        switch (res.status) {
+            case 404: throw new Error('404')
+            case 429: throw new Error('429')
+            default: throw new Error()
+        }
     }
 
     private static validateData(data: any): IWeatherData[] {
@@ -37,7 +38,7 @@ class WeatherService {
         return days.map(dayObj => new WeatherData(dayObj))
     }
 
-    public static async fetchWeatherByCity(city: string) {
+    public static async fetchWeatherByCityName(city: string) {
         const data = await this.fetchWeather(`q=${city}`)
         return this.validateData(data)
     }
