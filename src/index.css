@@ -9,3 +9,16 @@ body {
     padding-top: 56px;
   }
 }
+
+@keyframes bounceInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20%);
+  }
+  
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+}

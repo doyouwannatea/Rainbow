@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { IError, IWeatherData } from '../types'
 import Error from './Error'
 import Loader from './Loader'
@@ -24,7 +25,9 @@ const WeatherList: React.FC<Props> = ({ weatherList, error, isLoading }) => {
     return (
         <div className="weather-wrapper">
             {
-                weatherList.map(day => <WeatherItem key={day.dtText} {...day} />)
+                weatherList.map((day, index) => (
+                    <WeatherItem key={day.dtText} delay={index} {...day} />
+                ))
             }
         </div>
     )
