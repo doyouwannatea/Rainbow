@@ -8,7 +8,7 @@ import {
     CardContent,
     Typography,
 } from "@material-ui/core"
-import { IWeatherData } from '../types'
+import { IWeatherListItem } from '../types'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,6 +27,8 @@ const useStyles = makeStyles((theme) => ({
     weatherIcon: {
         width: 70,
         height: 70,
+        borderRadius: '50%',
+        backgroundColor: theme.palette.primary.light
     },
     temp: {
         minWidth: 50,
@@ -51,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-type Props = {} & IWeatherData
+type Props = {} & IWeatherListItem
 
 const WeatherItem: React.FC<Props> = ({ day, icon, description, temp }) => {
     const classes = useStyles()

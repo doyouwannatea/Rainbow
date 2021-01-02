@@ -1,6 +1,6 @@
-import { ITemperature, IWeatherData } from "."
+import { ITemperature, IWeatherListItem } from "."
 
-export default class WeatherData implements IWeatherData {
+export default class WeatherListItem implements IWeatherListItem {
     static WEEK_DAYS = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
     dtText: string
     day: string
@@ -13,7 +13,7 @@ export default class WeatherData implements IWeatherData {
 
         this.dtText = dayObj.dt_txt
         this.day = this.getWeekDay(this.dtText)
-        this.icon = icon.slice(0, icon.length - 1) + 'd'
+        this.icon = icon
         this.description = description
         this.temp = {
             temp: Math.round(dayObj.main.temp),
@@ -23,6 +23,6 @@ export default class WeatherData implements IWeatherData {
     }
 
     private getWeekDay(dt: string) {
-        return WeatherData.WEEK_DAYS[new Date(dt).getDay()]
+        return WeatherListItem.WEEK_DAYS[new Date(dt).getDay()]
     }
 }

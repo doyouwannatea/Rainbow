@@ -1,4 +1,4 @@
-import { IWeatherData, WeatherData } from '../types';
+import { WeatherListItem, IWeatherData } from '../types';
 
 class WeatherService {
     private static BASE_URL: string = 'https://community-open-weather-map.p.rapidapi.com/forecast?lang=ru&units=metric&'
@@ -6,7 +6,7 @@ class WeatherService {
     private static async fetchWeather(query: string) {
         const res = await fetch(this.BASE_URL + query, {
             "headers": {
-                "x-rapidapi-key": "656624af09msh62ed6a9b860a0f8p16a3bfjsndbdea8d9fdf6",
+                "x-rapidapi-key": "eb194c61cdmsh690666316ffae94p1ca362jsn7379733fcfa0",
                 "x-rapidapi-host": "community-open-weather-map.p.rapidapi.com"
             }
         })
@@ -24,7 +24,7 @@ class WeatherService {
         }
     }
 
-    private static validateData(data: any): IWeatherData[] {
+    private static validateData(data: any): IWeatherData {
         const { list } = data
 
         const days = [
@@ -35,7 +35,10 @@ class WeatherService {
             list[32],
         ]
 
-        return days.map(dayObj => new WeatherData(dayObj))
+        return {
+            weatherList: days.map(dayObj => new WeatherListItem(dayObj)),
+            name: data.city.name
+        }
     }
 
     public static async fetchWeatherByCityName(city: string) {

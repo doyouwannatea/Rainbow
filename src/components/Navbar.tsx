@@ -67,12 +67,12 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {
     isOpen: boolean,
-    isDarkCheme: boolean,
+    isDarkMode: boolean,
     toggleNavbar: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void,
     toggleCheme: () => void
 }
 
-const Navbar: React.FC<Props> = ({ isOpen, toggleNavbar, isDarkCheme, toggleCheme }) => {
+const Navbar: React.FC<Props> = ({ isOpen, toggleNavbar, isDarkMode, toggleCheme }) => {
     const classes = useStyles()
 
     return (
@@ -91,13 +91,13 @@ const Navbar: React.FC<Props> = ({ isOpen, toggleNavbar, isDarkCheme, toggleChem
                     className={classes.switchContainer}
                     control={
                         <Switch
-                            checked={isDarkCheme}
+                            checked={isDarkMode}
                             onChange={toggleCheme}
                             name="theme-switch"
-                            color="primary"
+                            color="default"
                         />
                     }
-                    label={<span className={classes.switchBtn}>{isDarkCheme ? <NightsStayOutlined /> : <WbSunnyOutlined />}</span>}
+                    label={<span className={classes.switchBtn}>{isDarkMode ? <NightsStayOutlined /> : <WbSunnyOutlined />}</span>}
                 />
                 <Divider />
                 <BottomNavigation className={classes.BottomNavigation} >

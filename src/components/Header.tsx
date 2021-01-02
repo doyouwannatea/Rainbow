@@ -65,9 +65,10 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
     toggleNavbar: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void
     setWeatherByCityName: (city: string) => (e: React.FormEvent) => void
+    currentPlace: string
 }
 
-const Header: React.FC<Props> = ({ toggleNavbar, setWeatherByCityName }) => {
+const Header: React.FC<Props> = ({ toggleNavbar, setWeatherByCityName, currentPlace }) => {
     const [cityName, setCityName] = useState('')
     const classes = useStyles()
 
@@ -90,7 +91,7 @@ const Header: React.FC<Props> = ({ toggleNavbar, setWeatherByCityName }) => {
                             <InputBase
                                 onChange={onChange}
                                 value={cityName}
-                                placeholder="Search…"
+                                placeholder={currentPlace.length > 0 ? currentPlace : "Search…"}
                                 classes={{
                                     root: classes.inputRoot,
                                     input: classes.inputInput,
@@ -100,7 +101,7 @@ const Header: React.FC<Props> = ({ toggleNavbar, setWeatherByCityName }) => {
                         </form>
                     </div>
                     <Typography variant="h6" className={classes.title}>
-                        News
+                        {currentPlace.length > 0 ? currentPlace : 'Location not found…'}
                     </Typography>
                 </Toolbar>
             </AppBar>

@@ -1,12 +1,12 @@
 import React from 'react'
-import { IError, IWeatherData } from '../types'
+import { IError, IWeatherListItem } from '../types'
 import Error from './Error'
 import Loader from './Loader'
 
 import WeatherItem from './WeatherItem'
 
 type Props = {
-    weatherList: IWeatherData[]
+    weatherList: IWeatherListItem[]
     isLoading: boolean
     error: IError
 }

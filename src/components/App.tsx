@@ -7,11 +7,12 @@ import Navbar from "./Navbar"
 import WeatherService from '../apis/WeatherService'
 
 import { IError, IWeatherData } from '../types'
+import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core'
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [isDarkCheme, setIsDarkCheme] = useState(false)
-  const [weatherList, setWeatherList] = useState<IWeatherData[]>([])
+  const [isDarkMode, setIsDarkCheme] = useState(false)
+  const [weatherData, setWeatherData] = useState<IWeatherData>({ weatherList: [], name: '' })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<IError>({ isError: false, message: '' })
 
@@ -21,7 +22,7 @@ const App = () => {
       setIsLoading(true)
       navigator.geolocation.getCurrentPosition(({ coords }) => {
         WeatherService.fetchWeatherByCoords(coords.latitude, coords.longitude)
-          .then(setWeatherList)
+          .then(setWeatherData)
           .catch(catchWeatherAPIError)
           .finally(() => setIsLoading(false))
       }, catchPositionError)
@@ -44,6 +45,13 @@ const App = () => {
     })
   }
 
+  const resetWeatherData = () => {
+    setWeatherData({
+      name: '',
+      weatherList: []
+    })
+  }
+
   const catchPositionError = (err: GeolocationPositionError) => {
     switch (err.code) {
       case 1:
@@ -56,6 +64,7 @@ const App = () => {
         onError('Ошибка сети или сервера.')
         break
     }
+    resetWeatherData()
   }
 
   const catchWeatherAPIError = (err: Error) => {
@@ -70,6 +79,7 @@ const App = () => {
         onError('Ошибка сети или сервера.')
         break
     }
+    resetWeatherData()
   }
 
   const setWeatherByCityName = (city: string) => (e: React.FormEvent) => {
@@ -78,7 +88,7 @@ const App = () => {
       resetError()
       setIsLoading(true)
       WeatherService.fetchWeatherByCityName(city)
-        .then(setWeatherList)
+        .then(setWeatherData)
         .catch(catchWeatherAPIError)
         .finally(() => setIsLoading(false))
     }
@@ -102,24 +112,36 @@ const App = () => {
     setIsDarkCheme(prevCheme => !prevCheme)
   }
 
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: isDarkMode ? 'dark' : 'light',
+        },
+      }),
+    [isDarkMode],
+  )
+
   return (
-    <div className="app">
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Navbar
         isOpen={isOpen}
         toggleNavbar={toggleNavbar}
-        isDarkCheme={isDarkCheme}
+        isDarkMode={isDarkMode}
         toggleCheme={toggleCheme}
       />
       <Header
         toggleNavbar={toggleNavbar}
         setWeatherByCityName={setWeatherByCityName}
+        currentPlace={weatherData.name}
       />
       <WeatherList
-        weatherList={weatherList}
+        weatherList={weatherData.weatherList}
         error={error}
         isLoading={isLoading}
       />
-    </div>
+    </ThemeProvider>
   )
 }
 

@@ -8,7 +8,7 @@ type Props = {
 
 const Error: React.FC<Props> = ({ message }) => {
     return (
-        <Alert severity="error">
+        <Alert style={{ borderRadius: 0 }} severity="error">
             <AlertTitle>Ошибка</AlertTitle>
             {message}
         </Alert>

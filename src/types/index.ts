@@ -1,4 +1,4 @@
-import WeatherData from './WeatherData'
+import WeatherListItem from './WeatherListItem'
 
 export interface ITemperature {
     temp: number
@@ -6,12 +6,17 @@ export interface ITemperature {
     tempMax: number
 }
 
-export interface IWeatherData {
+export interface IWeatherListItem {
     dtText: string
     day: string
     icon: string
     description: string
     temp: ITemperature
+}
+
+export interface IWeatherData {
+    weatherList: IWeatherListItem[]
+    name: string
 }
 
 export interface IError {
@@ -20,5 +25,5 @@ export interface IError {
 }
 
 export {
-    WeatherData
+    WeatherListItem
 }
