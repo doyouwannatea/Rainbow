@@ -10,10 +10,14 @@ import {
 } from "@material-ui/core"
 import { IWeatherData } from '../types'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         borderRadius: 0,
-        marginBottom: 1
+        marginBottom: 1,
+    },
+    content: {
+        position: 'relative',
+        paddingRight: 100,
     },
     weatherIconWrapper: {
         display: 'flex',
@@ -26,15 +30,25 @@ const useStyles = makeStyles({
     },
     temp: {
         minWidth: 50,
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        marginLeft: 'auto',
-        '& > div': {
-            fontWeight: 100
+        fontWeight: 100,
+        position: 'absolute',
+        right: 16,
+        top: '50%',
+        transform: 'translateY(-50%)'
+    },
+    title: {
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 18
         }
+    },
+    gridContainer: {
+        flexWrap: 'nowrap'
+    }, 
+    description: {
+        lineHeight: 1,
+        opacity: 0.9
     }
-})
+}))
 
 
 type Props = {} & IWeatherData
@@ -45,24 +59,22 @@ const WeatherItem: React.FC<Props> = ({ day, icon, description, temp }) => {
     return (
         <Card className={classes.root}>
             <CardActionArea>
-                <CardContent>
-                    <Grid container>
+                <CardContent className={classes.content}>
+                    <Grid className={classes.gridContainer} container>
                         <Grid item className={classes.weatherIconWrapper}>
                             <img src={`http://openweathermap.org/img/wn/${icon}@4x.png`} alt={description} className={classes.weatherIcon} />
                         </Grid>
                         <Grid item>
-                            <Typography variant="h5" component="div">
+                            <Typography className={classes.title} variant="h5" component="div">
                                 {day}
                             </Typography>
-                            <Typography variant="subtitle1" component="div">
+                            <Typography className={classes.description} variant="subtitle1" component="div">
                                 {description}
                             </Typography>
                         </Grid>
-                        <Grid item className={classes.temp}>
-                            <Typography variant="h4" component="div">
-                                {temp.temp}°С
-                            </Typography>
-                        </Grid>
+                        <Typography className={classes.temp} variant="h4" component="div">
+                            {temp.temp}°С
+                        </Typography>
                     </Grid>
                 </CardContent>
             </CardActionArea>
