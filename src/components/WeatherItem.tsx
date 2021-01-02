@@ -7,13 +7,17 @@ import {
     CardActionArea,
     CardContent,
     Typography,
+    Theme,
 } from "@material-ui/core"
 import { IWeatherListItem } from '../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles<Theme, MakeStylesProps>((theme) => ({
     root: {
         borderRadius: 0,
-        marginBottom: 1,
+        marginBottom: 2,
+        opacity: 0,
+        animation: 'bounceInLeft 800ms ease forwards',
+        animationDelay: ({ delay }) => `${delay * 50}ms`
     },
     content: {
         position: 'relative',
@@ -45,18 +49,23 @@ const useStyles = makeStyles((theme) => ({
     },
     gridContainer: {
         flexWrap: 'nowrap'
-    }, 
+    },
     description: {
         lineHeight: 1,
         opacity: 0.9
     }
 }))
 
+type MakeStylesProps = {
+    delay: number
+}
 
-type Props = {} & IWeatherListItem
+type Props = {
+    delay: number
+} & IWeatherListItem
 
-const WeatherItem: React.FC<Props> = ({ day, icon, description, temp }) => {
-    const classes = useStyles()
+const WeatherItem: React.FC<Props> = ({ day, icon, description, temp, delay }) => {
+    const classes = useStyles({ delay })
 
     return (
         <Card className={classes.root}>
