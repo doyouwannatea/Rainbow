@@ -21,7 +21,7 @@ const WeatherList = () => {
         <div className="weather-wrapper">
             {
                 weatherList!.map((day, index) => (
-                    <WeatherItem key={day.dtText} delay={index} {...day} />
+                    <WeatherItem key={day.dtText} delay={index * 2} {...day} />
                 ))
             }
         </div>
