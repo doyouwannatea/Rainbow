@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react'
 
-import Header from "./Header"
-import WeatherList from "./WeatherList"
-import Navbar from "./Navbar"
+import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core'
 
-import WeatherService from '../apis/WeatherService'
+import MainPage from './MainPage'
 
 import { IError, IWeatherData } from '../types'
-import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core'
+import WeatherService from '../apis/WeatherService'
+
+import { AsideContext, DarkModeContext, FetchingContext, WeatherDataContext } from '../context'
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [isDarkMode, setIsDarkCheme] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
   const [weatherData, setWeatherData] = useState<IWeatherData>({ weatherList: [], name: '' })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<IError>({ isError: false, message: '' })
 
   useEffect(() => {
-    resetError()
     if (navigator.geolocation) {
       setIsLoading(true)
       navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -64,7 +63,6 @@ const App = () => {
         onError('Ошибка сети или сервера.')
         break
     }
-    resetWeatherData()
   }
 
   const catchWeatherAPIError = (err: Error) => {
@@ -108,8 +106,8 @@ const App = () => {
     setIsOpen(open)
   }
 
-  const toggleCheme = () => {
-    setIsDarkCheme(prevCheme => !prevCheme)
+  const toggleDarkMode = () => {
+    setIsDarkMode(prevState => !prevState)
   }
 
   const theme = React.useMemo(
@@ -122,25 +120,20 @@ const App = () => {
     [isDarkMode],
   )
 
+  const { name, weatherList } = weatherData
+
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Navbar
-        isOpen={isOpen}
-        toggleNavbar={toggleNavbar}
-        isDarkMode={isDarkMode}
-        toggleCheme={toggleCheme}
-      />
-      <Header
-        toggleNavbar={toggleNavbar}
-        setWeatherByCityName={setWeatherByCityName}
-        currentPlace={weatherData.name}
-      />
-      <WeatherList
-        weatherList={weatherData.weatherList}
-        error={error}
-        isLoading={isLoading}
-      />
+      <AsideContext.Provider value={{ isOpen, toggleNavbar }} >
+        <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+          <FetchingContext.Provider value={{ error, isLoading }}>
+            <WeatherDataContext.Provider value={{ setWeatherByCityName, currentPlace: name, weatherList }}>
+              <CssBaseline />
+              <MainPage />
+            </WeatherDataContext.Provider>
+          </FetchingContext.Provider>
+        </DarkModeContext.Provider>
+      </AsideContext.Provider>
     </ThemeProvider>
   )
 }

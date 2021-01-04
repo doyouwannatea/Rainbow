@@ -1,20 +1,16 @@
-import React from 'react'
-import { IError, IWeatherListItem } from '../types'
+import React, { useContext } from 'react'
+import { FetchingContext, WeatherDataContext } from '../context'
 import Error from './Error'
 import Loader from './Loader'
 
 import WeatherItem from './WeatherItem'
 
-type Props = {
-    weatherList: IWeatherListItem[]
-    isLoading: boolean
-    error: IError
-}
+const WeatherList = () => {
+    const { weatherList } = useContext(WeatherDataContext)
+    const { error, isLoading } = useContext(FetchingContext)
 
-const WeatherList: React.FC<Props> = ({ weatherList, error, isLoading }) => {
-
-    if (error.isError) {
-        return <Error message={error.message} />
+    if (error!.isError) {
+        return <Error message={error!.message} />
     }
 
     if (isLoading) {
@@ -24,7 +20,7 @@ const WeatherList: React.FC<Props> = ({ weatherList, error, isLoading }) => {
     return (
         <div className="weather-wrapper">
             {
-                weatherList.map((day, index) => (
+                weatherList!.map((day, index) => (
                     <WeatherItem key={day.dtText} delay={index} {...day} />
                 ))
             }

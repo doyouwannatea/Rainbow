@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ContextType, useContext } from 'react';
 
 import { fade, makeStyles } from '@material-ui/core/styles';
 import {
@@ -20,6 +20,8 @@ import {
     FormControlLabel,
     Switch
 } from '@material-ui/core'
+import { AsideContext } from '../context/asideContext';
+import { DarkModeContext } from '../context';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -65,24 +67,19 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-type Props = {
-    isOpen: boolean,
-    isDarkMode: boolean,
-    toggleNavbar: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void,
-    toggleCheme: () => void
-}
-
-const Navbar: React.FC<Props> = ({ isOpen, toggleNavbar, isDarkMode, toggleCheme }) => {
+const Navbar = () => {
     const classes = useStyles()
+    const { isOpen, toggleNavbar } = useContext(AsideContext)
+    const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext)
 
     return (
-        <Drawer open={isOpen} onClose={toggleNavbar(false)}>
+        <Drawer open={isOpen} onClose={toggleNavbar!(false)}>
             <div className={classes.content}>
                 <ButtonGroup className={classes.btnGroup} variant="text">
                     <Button href="#" className={classes.homeBtn} startIcon={<HomeOutlined />} >
                         Home
                     </Button>
-                    <Button onClick={toggleNavbar(false)}>
+                    <Button onClick={toggleNavbar!(false)}>
                         <Close />
                     </Button>
                 </ButtonGroup>
@@ -92,7 +89,7 @@ const Navbar: React.FC<Props> = ({ isOpen, toggleNavbar, isDarkMode, toggleCheme
                     control={
                         <Switch
                             checked={isDarkMode}
-                            onChange={toggleCheme}
+                            onChange={toggleDarkMode}
                             name="theme-switch"
                             color="default"
                         />

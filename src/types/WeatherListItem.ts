@@ -1,4 +1,4 @@
-import { ITemperature, IWeatherListItem } from "."
+import { ITemperature, IWeatherListItem } from './'
 
 export default class WeatherListItem implements IWeatherListItem {
     static WEEK_DAYS = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { makeStyles, fade } from '@material-ui/core/styles';
 import { Menu, Search } from '@material-ui/icons';
@@ -9,6 +9,7 @@ import {
     Typography,
     IconButton,
 } from '@material-ui/core';
+import { AsideContext, WeatherDataContext } from '../context';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -62,14 +63,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-type Props = {
-    toggleNavbar: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void
-    setWeatherByCityName: (city: string) => (e: React.FormEvent) => void
-    currentPlace: string
-}
-
-const Header: React.FC<Props> = ({ toggleNavbar, setWeatherByCityName, currentPlace }) => {
+const Header = () => {
     const [cityName, setCityName] = useState('')
+    const { currentPlace, setWeatherByCityName } = useContext(WeatherDataContext)
+    const { toggleNavbar } = useContext(AsideContext)
     const classes = useStyles()
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,18 +77,18 @@ const Header: React.FC<Props> = ({ toggleNavbar, setWeatherByCityName, currentPl
         <div className={classes.root}>
             <AppBar position="fixed">
                 <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={toggleNavbar(true)}>
+                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={toggleNavbar!(true)}>
                         <Menu />
                     </IconButton>
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>
                             <Search />
                         </div>
-                        <form onSubmit={setWeatherByCityName(cityName)}>
+                        <form onSubmit={setWeatherByCityName!(cityName)}>
                             <InputBase
                                 onChange={onChange}
                                 value={cityName}
-                                placeholder={currentPlace.length > 0 ? currentPlace : "Search…"}
+                                placeholder={currentPlace!.length > 0 ? currentPlace : "Search…"}
                                 classes={{
                                     root: classes.inputRoot,
                                     input: classes.inputInput,
@@ -101,7 +98,7 @@ const Header: React.FC<Props> = ({ toggleNavbar, setWeatherByCityName, currentPl
                         </form>
                     </div>
                     <Typography variant="h6" className={classes.title}>
-                        {currentPlace.length > 0 ? currentPlace : 'Location not found…'}
+                        {currentPlace!.length > 0 ? currentPlace : 'Location not found…'}
                     </Typography>
                 </Toolbar>
             </AppBar>
