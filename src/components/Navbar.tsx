@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: 0,
         padding: '0 1rem',
         '&:hover': {
-            backgroundColor: fade(theme.palette.common.black, 0.04),
+            backgroundColor: fade(theme.palette.common[theme.palette.type === 'dark' ? 'white' : 'black'], 0.04),
         }
     },
     switchInfo: {
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     BottomNavigationAction: {
         minWidth: 60,
         '&:hover': {
-            backgroundColor: fade(theme.palette.common.black, 0.04),
+            backgroundColor: fade(theme.palette.common[theme.palette.type === 'dark' ? 'white' : 'black'], 0.04),
         }
     }
 }))
@@ -86,15 +86,15 @@ const Navbar = () => {
                 <Divider />
                 <FormControlLabel
                     className={classes.switchContainer}
+                    checked={isDarkMode}
+                    onChange={toggleDarkMode}
+                    label={<span className={classes.switchBtn}>{isDarkMode ? <NightsStayOutlined /> : <WbSunnyOutlined />}</span>}
                     control={
                         <Switch
-                            checked={isDarkMode}
-                            onChange={toggleDarkMode}
                             name="theme-switch"
                             color="default"
                         />
                     }
-                    label={<span className={classes.switchBtn}>{isDarkMode ? <NightsStayOutlined /> : <WbSunnyOutlined />}</span>}
                 />
                 <Divider />
                 <BottomNavigation className={classes.BottomNavigation} >

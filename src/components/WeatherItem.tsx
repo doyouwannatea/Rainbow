@@ -21,7 +21,7 @@ const useStyles = makeStyles<Theme, MakeStylesProps>((theme) => ({
     },
     content: {
         position: 'relative',
-        paddingRight: 100,
+        paddingRight: 105,
     },
     weatherIconWrapper: {
         display: 'flex',
@@ -52,7 +52,8 @@ const useStyles = makeStyles<Theme, MakeStylesProps>((theme) => ({
     },
     description: {
         lineHeight: 1,
-        opacity: 0.9
+        opacity: 0.9,
+        fontWeight: 100
     }
 }))
 
