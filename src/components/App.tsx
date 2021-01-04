@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
-
 import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core'
-
-import MainPage from './MainPage'
 
 import { IError, IWeatherData } from '../types'
 import WeatherService from '../apis/WeatherService'
-
 import { AsideContext, DarkModeContext, FetchingContext, WeatherDataContext } from '../context'
+
+import MainPage from './MainPage'
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -15,6 +13,8 @@ const App = () => {
   const [weatherData, setWeatherData] = useState<IWeatherData>({ weatherList: [], name: '' })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<IError>({ isError: false, message: '' })
+
+  const { name, weatherList } = weatherData
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -119,8 +119,6 @@ const App = () => {
       }),
     [isDarkMode],
   )
-
-  const { name, weatherList } = weatherData
 
   return (
     <ThemeProvider theme={theme}>

@@ -1,15 +1,15 @@
 import React, { useContext, useState } from 'react'
-
-import { makeStyles, fade } from '@material-ui/core/styles';
-import { Menu, Search } from '@material-ui/icons';
+import { makeStyles, fade } from '@material-ui/core/styles'
+import { Menu, Search } from '@material-ui/icons'
 import {
     InputBase,
     AppBar,
     Toolbar,
     Typography,
     IconButton,
-} from '@material-ui/core';
-import { AsideContext, WeatherDataContext } from '../context';
+} from '@material-ui/core'
+
+import { AsideContext, WeatherDataContext } from '../context'
 
 const useStyles = makeStyles((theme) => ({
     root: {

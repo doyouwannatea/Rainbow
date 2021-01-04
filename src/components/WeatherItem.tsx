@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { makeStyles } from '@material-ui/core/styles'
 import {
     Grid,
@@ -9,6 +8,7 @@ import {
     Typography,
     Theme,
 } from "@material-ui/core"
+
 import { IWeatherListItem } from '../types'
 
 const useStyles = makeStyles<Theme, MakeStylesProps>((theme) => ({

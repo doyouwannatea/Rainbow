@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 type Props = {

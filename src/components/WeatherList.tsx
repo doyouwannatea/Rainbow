@@ -1,8 +1,9 @@
 import React, { useContext } from 'react'
+
 import { FetchingContext, WeatherDataContext } from '../context'
+
 import Error from './Error'
 import Loader from './Loader'
-
 import WeatherItem from './WeatherItem'
 
 const WeatherList = () => {

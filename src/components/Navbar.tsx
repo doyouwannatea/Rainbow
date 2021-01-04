@@ -1,6 +1,5 @@
-import React, { ContextType, useContext } from 'react';
-
-import { fade, makeStyles } from '@material-ui/core/styles';
+import React, { useContext } from 'react'
+import { fade, makeStyles } from '@material-ui/core/styles'
 import {
     Close,
     NightsStayOutlined,
@@ -20,8 +19,9 @@ import {
     FormControlLabel,
     Switch
 } from '@material-ui/core'
-import { AsideContext } from '../context/asideContext';
-import { DarkModeContext } from '../context';
+
+import { AsideContext } from '../context/asideContext'
+import { DarkModeContext } from '../context'
 
 const useStyles = makeStyles((theme) => ({
     content: {
