@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import {
     Close,
@@ -68,15 +69,21 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Navbar = () => {
-    const classes = useStyles()
-    const { isOpen, toggleNavbar } = useContext(AsideContext)
+    const history = useHistory()
+    const { isOpen, toggleNavbar, closeNavbar } = useContext(AsideContext)
     const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext)
+    const classes = useStyles()
+
+    const clickHandler = () => {
+        closeNavbar!()
+        history.push('/')
+    }
 
     return (
         <Drawer open={isOpen} onClose={toggleNavbar!(false)}>
             <div className={classes.content}>
                 <ButtonGroup className={classes.btnGroup} variant="text">
-                    <Button href="#" className={classes.homeBtn} startIcon={<HomeOutlined />} >
+                    <Button onClick={clickHandler} className={classes.homeBtn} startIcon={<HomeOutlined />} >
                         Home
                     </Button>
                     <Button onClick={toggleNavbar!(false)}>

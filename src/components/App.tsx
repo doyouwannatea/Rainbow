@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 
 import { IError, IWeatherData } from '../types'
 import WeatherService from '../apis/WeatherService'
 import { AsideContext, DarkModeContext, FetchingContext, WeatherDataContext } from '../context'
 
-import MainPage from './MainPage'
+import DayPage from './DayPage'
+import Header from './Header'
+import Navbar from './Navbar'
+import WeatherList from './WeatherList'
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [weatherData, setWeatherData] = useState<IWeatherData>({ weatherList: [], name: '' })
   const [isLoading, setIsLoading] = useState(false)
+  const [isAnimationEnds, setIsAnimationEnds] = useState(false)
   const [error, setError] = useState<IError>({ isError: false, message: '' })
 
   const { name, weatherList } = weatherData
@@ -83,6 +88,8 @@ const App = () => {
   const setWeatherByCityName = (city: string) => (e: React.FormEvent) => {
     e.preventDefault()
     if (city.length > 0) {
+      setIsAnimationEnds(false)
+      document.querySelector('input')?.blur()
       resetError()
       setIsLoading(true)
       WeatherService.fetchWeatherByCityName(city)
@@ -106,9 +113,15 @@ const App = () => {
     setIsOpen(open)
   }
 
+  const closeNavbar = () => {
+    setIsOpen(false)
+  }
+
   const toggleDarkMode = () => {
     setIsDarkMode(prevState => !prevState)
   }
+
+  const endAnimation = () => setIsAnimationEnds(true)
 
   const theme = React.useMemo(
     () =>
@@ -122,12 +135,22 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AsideContext.Provider value={{ isOpen, toggleNavbar }} >
+      <AsideContext.Provider value={{ isOpen, toggleNavbar, closeNavbar }} >
         <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
-          <FetchingContext.Provider value={{ error, isLoading }}>
+          <FetchingContext.Provider value={{ error, isLoading, endAnimation, isAnimationEnds }}>
             <WeatherDataContext.Provider value={{ setWeatherByCityName, currentPlace: name, weatherList }}>
               <CssBaseline />
-              <MainPage />
+              <Router>
+                <Header />
+                <Navbar />
+                <Switch>
+                  <Route path="/" component={WeatherList} exact />
+                  <Route path="/:id" component={DayPage} exact />
+                  <Route path="*">
+                    <Redirect to="/" />
+                  </Route>
+                </Switch>
+              </Router>
             </WeatherDataContext.Provider>
           </FetchingContext.Provider>
         </DarkModeContext.Provider>

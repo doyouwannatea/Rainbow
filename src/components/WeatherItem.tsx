@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import {
     Grid,
@@ -10,14 +11,15 @@ import {
 } from "@material-ui/core"
 
 import { IWeatherListItem } from '../types'
+import { FetchingContext } from '../context'
 
 const useStyles = makeStyles<Theme, MakeStylesProps>((theme) => ({
     root: {
         borderRadius: 0,
         marginBottom: 2,
-        opacity: 0,
-        animation: 'bounceInLeft 800ms ease forwards',
-        animationDelay: ({ delay }) => `${delay * 50}ms`
+        opacity: ({ isAnimationEnds }) => isAnimationEnds ? 1 : 0,
+        animation: ({ isAnimationEnds }) => isAnimationEnds ? '' : 'bounceInLeft 800ms ease forwards',
+        animationDelay: ({ index }) => `${index * 100}ms`
     },
     content: {
         position: 'relative',
@@ -58,19 +60,26 @@ const useStyles = makeStyles<Theme, MakeStylesProps>((theme) => ({
 }))
 
 type MakeStylesProps = {
-    delay: number
+    index: number
+    isAnimationEnds: boolean | undefined
 }
 
 type Props = {
-    delay: number
+    index: number
 } & IWeatherListItem
 
-const WeatherItem: React.FC<Props> = ({ day, icon, description, temp, delay }) => {
-    const classes = useStyles({ delay })
+const WeatherItem: React.FC<Props> = ({ day, icon, description, temp, index }) => {
+    const { isAnimationEnds } = useContext(FetchingContext)
+    const history = useHistory()
+    const classes = useStyles({ index, isAnimationEnds })
+
+    const clickHandler = () => {
+        history.push(`/${index}`)
+    }
 
     return (
         <Card className={classes.root}>
-            <CardActionArea>
+            <CardActionArea onClick={clickHandler}>
                 <CardContent className={classes.content}>
                     <Grid className={classes.gridContainer} container>
                         <Grid item className={classes.weatherIconWrapper}>
@@ -85,7 +94,7 @@ const WeatherItem: React.FC<Props> = ({ day, icon, description, temp, delay }) =
                             </Typography>
                         </Grid>
                         <Typography className={classes.temp} variant="h4" component="div">
-                            {temp.temp}°С
+                            {temp}°С
                         </Typography>
                     </Grid>
                 </CardContent>

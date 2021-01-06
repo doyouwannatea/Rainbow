@@ -7,15 +7,19 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: '35vh'
+        paddingTop: '35vh'
     }
 })
 
-const Loader = () => {
+type Props = {
+    style?: React.CSSProperties
+}
+
+const Loader: React.FC<Props> = ({ style }) => {
     const classes = useStyles()
 
     return (
-        <div className={classes.wrapper}>
+        <div style={style} className={classes.wrapper}>
             <CircularProgress />
         </div>
     )

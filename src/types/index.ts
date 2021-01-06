@@ -1,21 +1,19 @@
 import WeatherListItem from './WeatherListItem'
 
-export interface ITemperature {
-    temp: number
-    tempMin: number
-    tempMax: number
-}
-
 export interface IWeatherListItem {
     dtText: string
+    dt: Date
     day: string
+    hours: string
     icon: string
     description: string
-    temp: ITemperature
+    temp: number
+    humidity?: number
+    pressure?: number
 }
 
 export interface IWeatherData {
-    weatherList: IWeatherListItem[]
+    weatherList: IWeatherListItem[][]
     name: string
 }
 

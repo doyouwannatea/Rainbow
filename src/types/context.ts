@@ -2,7 +2,9 @@ import { IError, IWeatherListItem } from './'
 
 export interface IFetchingContext {
     isLoading: boolean
+    isAnimationEnds: boolean
     error: IError
+    endAnimation: () => void
 }
 
 export interface IDarkModeContext {
@@ -12,11 +14,12 @@ export interface IDarkModeContext {
 
 export interface IAsideContext {
     isOpen: boolean
+    closeNavbar: () => void
     toggleNavbar: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void
 }
 
 export interface IWeatherDataContext {
     currentPlace: string
-    weatherList: IWeatherListItem[]
+    weatherList: IWeatherListItem[][]
     setWeatherByCityName: (city: string) => (e: React.FormEvent) => void
 }

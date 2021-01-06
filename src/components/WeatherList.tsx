@@ -1,31 +1,21 @@
 import React, { useContext } from 'react'
 
-import { FetchingContext, WeatherDataContext } from '../context'
+import { WeatherDataContext } from '../context'
+import withData from '../hoc/withData'
 
-import Error from './Error'
-import Loader from './Loader'
 import WeatherItem from './WeatherItem'
 
 const WeatherList = () => {
     const { weatherList } = useContext(WeatherDataContext)
-    const { error, isLoading } = useContext(FetchingContext)
-
-    if (error!.isError) {
-        return <Error message={error!.message} />
-    }
-
-    if (isLoading) {
-        return <Loader />
-    }
 
     return (
         <div className="weather-wrapper">
             {
                 weatherList!.map((day, index) => (
-                    <WeatherItem key={day.dtText} delay={index * 2} {...day} />
+                    <WeatherItem key={day[0].dtText} index={index} {...day[0]} />
                 ))
             }
         </div>
     )
 }
-export default WeatherList
+export default withData(WeatherList)

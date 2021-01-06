@@ -1,7 +1,9 @@
-import { WeatherListItem, IWeatherData } from '../types';
+import { WeatherListItem, IWeatherData } from '../types'
+import weatherDataJSON from './weatherData.json'
 
 class WeatherService {
     private static BASE_URL: string = 'https://community-open-weather-map.p.rapidapi.com/forecast?lang=ru&units=metric&'
+    private static isDummyData = false
 
     private static async fetchWeather(query: string) {
         const res = await fetch(this.BASE_URL + query, {
@@ -13,7 +15,6 @@ class WeatherService {
 
         if (res.ok) {
             const weatherData = await res.json()
-            console.log(weatherData)
             return weatherData
         }
 
@@ -27,26 +28,34 @@ class WeatherService {
     private static validateData(data: any): IWeatherData {
         const { list } = data
 
-        const days = [
-            list[0],
-            list[8],
-            list[16],
-            list[24],
-            list[32],
-        ]
+        const size = 8
+        const days = []
+        for (let i = 0; i < Math.ceil(list.length / size); i++) {
+            days[i] = list.slice((i * size), (i * size) + size)
+        }
 
         return {
-            weatherList: days.map(dayObj => new WeatherListItem(dayObj)),
+            weatherList: days.map(day => {
+                return day.map((dayObj: any) => new WeatherListItem(dayObj))
+            }),
             name: data.city.name
         }
     }
 
     public static async fetchWeatherByCityName(city: string) {
+        if (this.isDummyData) {
+            console.log(weatherDataJSON)
+            return this.validateData(weatherDataJSON)
+        }
         const data = await this.fetchWeather(`q=${city}`)
         return this.validateData(data)
     }
 
     public static async fetchWeatherByCoords(lat: string | number, lon: string | number) {
+        if (this.isDummyData) {
+            console.log(weatherDataJSON)
+            return this.validateData(weatherDataJSON)
+        }
         const data = await this.fetchWeather(`lat=${lat}&lon=${lon}`)
         return this.validateData(data)
     }
