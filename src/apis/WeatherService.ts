@@ -3,7 +3,7 @@ import weatherDataJSON from './weatherData.json'
 
 class WeatherService {
     private static BASE_URL: string = 'https://community-open-weather-map.p.rapidapi.com/forecast?lang=ru&units=metric&'
-    private static isDummyData = true
+    private static isDummyData = false
 
     private static async fetchWeather(query: string) {
         const res = await fetch(this.BASE_URL + query, {
