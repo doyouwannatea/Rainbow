@@ -9,7 +9,7 @@ import {
     IconButton,
 } from '@material-ui/core'
 
-import { AsideContext, WeatherDataContext } from '../context'
+import { NavbarContext, WeatherDataContext } from '../context'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 const Header = () => {
     const [cityName, setCityName] = useState('')
     const { currentPlace, setWeatherByCityName } = useContext(WeatherDataContext)
-    const { toggleNavbar } = useContext(AsideContext)
+    const { toggleNavbar } = useContext(NavbarContext)
     const classes = useStyles()
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

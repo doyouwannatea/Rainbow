@@ -3,7 +3,7 @@ import { Redirect, useParams } from 'react-router-dom'
 import { Container, Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { FetchingContext, WeatherDataContext } from '../context'
+import { NavbarContext, FetchingContext, WeatherDataContext } from '../context'
 import withData from '../hoc/withData'
 
 import Chart from './Chart'
@@ -35,9 +35,9 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: 'calc(100vh - 64px)',
+        minHeight: 'calc(100vh - 64px)',
         [theme.breakpoints.down('xs')]: {
-            height: 'calc(100vh - 56px)'
+            minHeight: 'calc(100vh - 56px)'
         }
     },
 }))
@@ -49,11 +49,17 @@ type Params = {
 const DayPage = () => {
     const { weatherList, currentPlace } = useContext(WeatherDataContext)
     const { endAnimation } = useContext(FetchingContext)
+    const { closeNavbar } = useContext(NavbarContext)
     const { id } = useParams<Params>()
     const classes = useStyles()
 
     useEffect(() => {
+        closeNavbar!()
         endAnimation!()
+
+        return () => {
+            closeNavbar!()
+        }
     }, [])
 
     const index = parseInt(id)

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
-import { fade, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import {
     Close,
     NightsStayOutlined,
@@ -21,7 +21,7 @@ import {
     Switch
 } from '@material-ui/core'
 
-import { AsideContext } from '../context/asideContext'
+import { NavbarContext } from '../context/navbarContext'
 import { DarkModeContext } from '../context'
 
 const useStyles = makeStyles((theme) => ({
@@ -40,8 +40,9 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-between',
         marginRight: 0,
         padding: '0 1rem',
+        transition: 'background-color ease 250ms',
         '&:hover': {
-            backgroundColor: fade(theme.palette.common[theme.palette.type === 'dark' ? 'white' : 'black'], 0.04),
+            backgroundColor: theme.palette.action.hover
         }
     },
     switchInfo: {
@@ -62,20 +63,21 @@ const useStyles = makeStyles((theme) => ({
     },
     BottomNavigationAction: {
         minWidth: 60,
+        transition: 'background-color ease 250ms',
         '&:hover': {
-            backgroundColor: fade(theme.palette.common[theme.palette.type === 'dark' ? 'white' : 'black'], 0.04),
+            backgroundColor: theme.palette.action.hover
         }
     }
 }))
 
 const Navbar = () => {
     const history = useHistory()
-    const { isOpen, toggleNavbar, closeNavbar } = useContext(AsideContext)
+    const { isOpen, toggleNavbar } = useContext(NavbarContext)
     const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext)
     const classes = useStyles()
 
-    const clickHandler = () => {
-        closeNavbar!()
+    const onHomeClick = (event: React.MouseEvent) => {
+        toggleNavbar!(false)(event)
         history.push('/')
     }
 
@@ -83,7 +85,7 @@ const Navbar = () => {
         <Drawer open={isOpen} onClose={toggleNavbar!(false)}>
             <div className={classes.content}>
                 <ButtonGroup className={classes.btnGroup} variant="text">
-                    <Button onClick={clickHandler} className={classes.homeBtn} startIcon={<HomeOutlined />} >
+                    <Button onClick={onHomeClick} className={classes.homeBtn} startIcon={<HomeOutlined />} >
                         Home
                     </Button>
                     <Button onClick={toggleNavbar!(false)}>

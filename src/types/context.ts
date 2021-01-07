@@ -12,10 +12,10 @@ export interface IDarkModeContext {
     toggleDarkMode: () => void
 }
 
-export interface IAsideContext {
+export interface INavbarContext {
     isOpen: boolean
-    closeNavbar: () => void
     toggleNavbar: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void
+    closeNavbar: () => void
 }
 
 export interface IWeatherDataContext {

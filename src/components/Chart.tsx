@@ -13,7 +13,8 @@ const useStyles = makeStyles({
         height: '45vh'
     },
     paper: {
-        padding: '1.5rem 1rem 1rem 1rem'
+        padding: '1.5rem 1rem 1rem 1rem',
+        marginTop: '0.5rem'
     }
 })
 
@@ -22,27 +23,27 @@ type Props = {
 }
 
 const Chart: React.FC<Props> = ({ weatherList }) => {
-    const { palette: { type } } = useTheme()
+    const { palette: { background, text, type } } = useTheme()
     const classes = useStyles()
 
     useEffect(() => {
+
         const chart = am4core.create('chart', am4charts.XYChart)
         chart.data = weatherList
 
         const dateAxis = chart.xAxes.push(new am4charts.DateAxis())
         dateAxis.renderer.grid.template.location = 0
-        if (type === 'dark') {
-            dateAxis.renderer.grid.template.stroke = am4core.color('#fff')
-            dateAxis.renderer.labels.template.fill = am4core.color('#fff')
-        }
+        dateAxis.tooltip!.background.fill = am4core.color(text.primary)
+        dateAxis.tooltip!.background.strokeWidth = 0
+        dateAxis.tooltip!.label.fill = am4core.color(background.default)
+        dateAxis.renderer.grid.template.stroke = am4core.color(text.primary)
+        dateAxis.renderer.labels.template.fill = am4core.color(text.primary)
 
         const valueAxis = chart.yAxes.push(new am4charts.ValueAxis())
         valueAxis!.tooltip!.disabled = true
         valueAxis.renderer.minWidth = 35
-        if (type === 'dark') {
-            valueAxis.renderer.grid.template.stroke = am4core.color('#fff')
-            valueAxis.renderer.labels.template.fill = am4core.color('#fff')
-        }
+        valueAxis.renderer.grid.template.stroke = am4core.color(text.primary)
+        valueAxis.renderer.labels.template.fill = am4core.color(text.primary)
 
         const series = chart.series.push(new am4charts.LineSeries())
         series.dataFields.dateX = 'dt'
@@ -58,7 +59,7 @@ const Chart: React.FC<Props> = ({ weatherList }) => {
             chart.dispose()
         }
 
-    }, [type])
+    }, [type, weatherList])
 
     return (
         <Paper className={classes.paper}>

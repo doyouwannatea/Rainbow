@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 
 import { IError, IWeatherData } from '../types'
 import WeatherService from '../apis/WeatherService'
-import { AsideContext, DarkModeContext, FetchingContext, WeatherDataContext } from '../context'
+import { NavbarContext, DarkModeContext, FetchingContext, WeatherDataContext } from '../context'
 
 import DayPage from './DayPage'
 import Header from './Header'
@@ -113,13 +113,9 @@ const App = () => {
     setIsOpen(open)
   }
 
-  const closeNavbar = () => {
-    setIsOpen(false)
-  }
+  const closeNavbar = () => setIsOpen(false)
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(prevState => !prevState)
-  }
+  const toggleDarkMode = () => setIsDarkMode(prevState => !prevState)
 
   const endAnimation = () => setIsAnimationEnds(true)
 
@@ -135,7 +131,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AsideContext.Provider value={{ isOpen, toggleNavbar, closeNavbar }} >
+      <NavbarContext.Provider value={{ isOpen, toggleNavbar, closeNavbar }} >
         <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
           <FetchingContext.Provider value={{ error, isLoading, endAnimation, isAnimationEnds }}>
             <WeatherDataContext.Provider value={{ setWeatherByCityName, currentPlace: name, weatherList }}>
@@ -154,7 +150,7 @@ const App = () => {
             </WeatherDataContext.Provider>
           </FetchingContext.Provider>
         </DarkModeContext.Provider>
-      </AsideContext.Provider>
+      </NavbarContext.Provider>
     </ThemeProvider>
   )
 }

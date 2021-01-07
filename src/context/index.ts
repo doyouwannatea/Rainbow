@@ -1,10 +1,10 @@
-import { AsideContext } from './asideContext'
+import { NavbarContext } from './navbarContext'
 import { DarkModeContext } from './darkModeContext'
 import { FetchingContext } from './fetchingContext'
 import { WeatherDataContext } from './weatherDataContext'
 
 export {
-    AsideContext,
+    NavbarContext,
     DarkModeContext,
     FetchingContext,
     WeatherDataContext
