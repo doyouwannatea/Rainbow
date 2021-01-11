@@ -47,7 +47,7 @@ type Params = {
 }
 
 const DayPage = () => {
-    const { weatherList, currentPlace } = useContext(WeatherDataContext)
+    const { weatherList } = useContext(WeatherDataContext)
     const { endAnimation } = useContext(FetchingContext)
     const { closeNavbar } = useContext(NavbarContext)
     const { id } = useParams<Params>()
@@ -71,10 +71,7 @@ const DayPage = () => {
     return (
         <Container className={classes.container}>
             <div className="content">
-                <Typography variant="h4" component="h1">
-                    {currentPlace}
-                </Typography>
-                <Typography variant="subtitle1" component="h2">
+                <Typography variant="h5" component="h2">
                     {day} {hours}
                 </Typography>
                 <Typography variant="subtitle1" component="div">

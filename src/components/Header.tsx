@@ -18,14 +18,6 @@ const useStyles = makeStyles((theme) => ({
     menuButton: {
         marginRight: theme.spacing(2),
     },
-    title: {
-        textAlign: 'right',
-        marginLeft: 'auto',
-        display: 'none',
-        [theme.breakpoints.up('sm')]: {
-            display: 'block'
-        },
-    },
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
@@ -97,9 +89,6 @@ const Header = () => {
                             />
                         </form>
                     </div>
-                    <Typography variant="h6" className={classes.title}>
-                        {currentPlace!.length > 0 ? currentPlace : 'Location not found…'}
-                    </Typography>
                 </Toolbar>
             </AppBar>
         </div>
