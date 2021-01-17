@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
-import { Container, Grid, Typography } from '@material-ui/core'
+import { Container, Grid, Paper, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { NavbarContext, FetchingContext, WeatherDataContext } from '../context'
@@ -30,14 +30,18 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.primary.light
     },
     container: {
-        paddingTop: '1rem',
-        paddingBottom: '1rem',
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
+    },
+    paper: {
+        padding: theme.spacing(3),
+    },
+    cardHeader: {
         display: 'flex',
-        flexDirection: 'column',
         justifyContent: 'space-between',
-        minHeight: 'calc(100vh - 64px)',
-        [theme.breakpoints.down('xs')]: {
-            minHeight: 'calc(100vh - 56px)'
+        flexWrap: 'wrap',
+        '&>*:first-child': {
+            paddingRight: theme.spacing(2)
         }
     },
 }))
@@ -70,20 +74,22 @@ const DayPage = () => {
 
     return (
         <Container className={classes.container}>
-            <div className="content">
-                <Typography variant="h5" component="h2">
-                    {day} {hours}
-                </Typography>
-                <Typography variant="subtitle1" component="div">
-                    {description}
-                </Typography>
+            <Paper className={classes.paper}>
+                <div className={classes.cardHeader}>
+                    <Typography variant="h5" component="h2">
+                        {day} {hours}
+                    </Typography>
+                    <Typography variant="subtitle1" component="div">
+                        {description}
+                    </Typography>
+                </div>
                 <Grid className={classes.center} container>
                     <Grid className={classes.center} item>
                         <Typography className={classes.temp} variant="h2" component="div">
                             {temp}
                             <Typography variant="caption" component="sup">
                                 °C
-                                </Typography>
+                            </Typography>
                         </Typography>
                     </Grid>
                     <Grid className={classes.center} item>
@@ -92,11 +98,11 @@ const DayPage = () => {
                 </Grid>
                 <Typography variant="subtitle1" component="div">
                     Влажность: {humidity}%
-                </Typography>
+                    </Typography>
                 <Typography variant="subtitle1" component="div">
                     Давление: {pressure} мм рт.
                 </Typography>
-            </div>
+            </Paper>
             <Chart weatherList={weatherList![index]} />
         </Container>
     )
