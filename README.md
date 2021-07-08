@@ -1,6 +1,6 @@
 # Rainbow
 
-`Rainbow` - это приложение для просмотра погоды, построенное на основе [React.js](https://ru.reactjs.org/). UI был разработан с помощью библиотеки [Material-UI](https://material-ui.com/ru/), данные взяты из сервиса [OpenWeather](https://openweathermap.org/).
+[`Rainbow`](http://doyouwannatea.github.io/Rainbow) - это приложение для просмотра погоды, построенное на основе [React.js](https://ru.reactjs.org/). UI был разработан с помощью библиотеки [Material-UI](https://material-ui.com/ru/), данные взяты из сервиса [OpenWeather](https://openweathermap.org/).
 
 ## Технологии
 
