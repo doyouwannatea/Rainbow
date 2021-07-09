@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Rainbow/static/css/main.d8fec55f.chunk.css",
-    "main.js": "/Rainbow/static/js/main.ae28d2c9.chunk.js",
-    "main.js.map": "/Rainbow/static/js/main.ae28d2c9.chunk.js.map",
+    "main.js": "/Rainbow/static/js/main.efee73aa.chunk.js",
+    "main.js.map": "/Rainbow/static/js/main.efee73aa.chunk.js.map",
     "runtime-main.js": "/Rainbow/static/js/runtime-main.47ec115d.js",
     "runtime-main.js.map": "/Rainbow/static/js/runtime-main.47ec115d.js.map",
     "xlsx.js": "/Rainbow/static/js/xlsx.7ac87350.chunk.js",
@@ -25,6 +25,6 @@
     "static/js/runtime-main.47ec115d.js",
     "static/js/3.3801b7bf.chunk.js",
     "static/css/main.d8fec55f.chunk.css",
-    "static/js/main.ae28d2c9.chunk.js"
+    "static/js/main.efee73aa.chunk.js"
   ]
 }
