@@ -1,14 +1,16 @@
 import { WeatherListItem, IWeatherData } from '../types'
+import counter from './send'
 import weatherDataJSON from './weatherData.json'
 
 class WeatherService {
-    private static BASE_URL: string = 'https://api.openweathermap.org/data/2.5/forecast?lang=ru&units=metric&appid=5b7c2d94dfe2f4c130db1821aec8f1f9'
+    private static BASE_URL: string = 'https://api.openweathermap.org/data/2.5/forecast?lang=ru&units=metric&appid=5b7c2d94dfe2f4c130db1821aec8f1f9&'
     private static isDummyData = false
 
     private static async fetchWeather(query: string) {
         const res = await fetch(this.BASE_URL + query)
 
         if (res.ok) {
+            counter.increase('количество просмотренных прогнозов погоды')
             const weatherData = await res.json()
             return weatherData
         }

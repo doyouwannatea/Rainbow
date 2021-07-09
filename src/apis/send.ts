@@ -14,6 +14,9 @@ var MAX_BATCH_COUNTERS = 42;
  */
 var COUNTERS_BATCH_TIMEOUT = 15;
 
+const API_KEY = '8B6B7D2D-BAAF-44B9-A2FB-0DEB94754714'
+const PAGE_NAME = 'Weather view page'
+
 interface ObjectShape {
     [fieldName: string]: any
 }
@@ -23,6 +26,7 @@ export class Counter {
     reqid = '';
     page = '';
     additional = {};
+    counters: ObjectShape = {}
     private _inited = false;
     private _indexes = {};
     private _countersBatchData = [];
@@ -37,6 +41,20 @@ export class Counter {
 
             this._inited = true;
         }
+    }
+
+    increase(name: string) {
+        if (!this.counters[name]) {
+            this.counters[name] = 0
+        }
+
+        this.counters[name] += 1
+    }
+
+    getCounterValue(name: string) {
+        const value = this.counters[name]
+        delete this.counters[name]
+        return value || 0
     }
 
     setAdditionalParams(additionalParams: ObjectShape) {
@@ -83,7 +101,7 @@ export class Counter {
                 self.sendBatchRequest();
             }, COUNTERS_BATCH_TIMEOUT);
         } else {
-            self.sendBatchRequest();
+            sendBatchRequest();
         }
     }
 
@@ -103,3 +121,9 @@ export class Counter {
         }
     }
 }
+
+export default new Counter(
+    API_KEY,
+    String(Math.random()).substr(2, 12),
+    PAGE_NAME
+)
