@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 
 import { IError, IWeatherData } from '../types'
 import WeatherService from '../apis/WeatherService'
-import counter from '../apis/send'
+
 import {
   NavbarContext,
   DarkModeContext,
@@ -17,15 +17,6 @@ import Header from './Header'
 import Navbar from './Navbar'
 import WeatherList from './WeatherList'
 
-console.log('Вход на сайт');
-const enterSiteTime = Date.now()
-
-window.addEventListener('beforeunload', () => {
-  counter.send('userOnSiteTime', Date.now() - enterSiteTime)
-  counter.send('burgerMenuClicks', counter.getCounterValue('количество кликов по бургер-меню'))
-  counter.send('forecastsViewed', counter.getCounterValue('количество просмотренных прогнозов погоды'))
-})
-
 const App = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -37,8 +28,9 @@ const App = () => {
   const { name, weatherList } = weatherData
 
   useEffect(() => {
-    counter.setAdditionalParams({
-      'darkTheme': isDarkMode
+    // @ts-ignore
+    window.counter.setAdditionalParams({
+      darkTheme: isDarkMode
     })
   }, [isDarkMode])
 
@@ -131,7 +123,8 @@ const App = () => {
       return
     }
 
-    counter.increase('количество кликов по бургер-меню')
+    // @ts-ignore
+    window.counter.increase('burgerMenuClicks')
     setIsOpen(open)
   }
 

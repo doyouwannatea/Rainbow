@@ -14,116 +14,106 @@ var MAX_BATCH_COUNTERS = 42;
  */
 var COUNTERS_BATCH_TIMEOUT = 15;
 
-const API_KEY = '8B6B7D2D-BAAF-44B9-A2FB-0DEB94754714'
-const PAGE_NAME = 'Weather view page'
+function Counter() {
+    this.guid = '';
+    this.reqid = '';
+    this.page = '';
+    this.additional = {};
 
-interface ObjectShape {
-    [fieldName: string]: any
+    this._inited = false;
+    this._indexes = {};
+    this._counters = {};
+    this._countersBatchData = [];
+    this._counterTimerId = null;
+
+    this.counterUrl = 'https://shri.yandex/hw/stat/send';
 }
 
-export class Counter {
-    guid = '';
-    reqid = '';
-    page = '';
-    additional = {};
-    counters: ObjectShape = {}
-    private _inited = false;
-    private _indexes = {};
-    private _countersBatchData = [];
-    private _counterTimerId = null;
-    private counterUrl = 'https://shri.yandex/hw/stat/send';
-
-    constructor(guid: string, reqid: string, page: string) {
-        if (guid && reqid && page) {
-            this.guid = guid;
-            this.reqid = reqid;
-            this.page = page;
-
-            this._inited = true;
-        }
+Counter.prototype.increase = function (name) {
+    if (!this._counters[name]) {
+        this._counters[name] = 0
     }
 
-    increase(name: string) {
-        if (!this.counters[name]) {
-            this.counters[name] = 0
-        }
+    this._counters[name] += 1
+}
 
-        this.counters[name] += 1
+Counter.prototype.getCounterValue = function (name) {
+    return this._counters[name] || 0
+}
+
+Counter.prototype.init = function (guid, reqid, page) {
+    if (guid && reqid && page) {
+        this.guid = guid;
+        this.reqid = reqid;
+        this.page = page;
+
+        this._inited = true;
+    }
+};
+
+Counter.prototype.setAdditionalParams = function (additionalParams) {
+    this.additional = Object.assign({}, additionalParams);
+};
+
+/**
+ * Отправка счётчика. Основной транспорт - sendBeacon, запасной - XMLHttpRequest. Быстро поступающие одиночные события
+ * накапливаются и отправляются пачками по MAX_BATCH_COUNTERS штук.
+ *
+ * @param {String} name
+ * @param {Number} value
+ */
+Counter.prototype.send = function (name, value) {
+    if (!this._inited) {
+        console.warn('counter is not inited');
+
+        return;
     }
 
-    getCounterValue(name: string) {
-        const value = this.counters[name]
-        delete this.counters[name]
-        return value || 0
+    clearTimeout(this._counterTimerId);
+
+    if (!this._indexes[name]) {
+        this._indexes[name] = 0;
     }
 
-    setAdditionalParams(additionalParams: ObjectShape) {
-        this.additional = Object.assign({}, additionalParams);
+    var counterData = {
+        counterId: this.guid,
+        requestId: this.reqid,
+        page: this.page,
+        name: name,
+        value: value,
+        index: this._indexes[name],
+        additional: this.additional
+    },
+        self = this;
+
+    this._countersBatchData.push(counterData);
+
+    this._indexes[name]++;
+
+    if (this._countersBatchData.length < MAX_BATCH_COUNTERS) {
+        this._counterTimerId = setTimeout(function () {
+            self.sendBatchRequest();
+        }, COUNTERS_BATCH_TIMEOUT);
+    } else {
+        self.sendBatchRequest();
     }
+};
 
-    /**
-     * Отправка счётчика. Основной транспорт - sendBeacon, запасной - XMLHttpRequest. Быстро поступающие одиночные события
-     * накапливаются и отправляются пачками по MAX_BATCH_COUNTERS штук.
-     *
-     * @param {String} name
-     * @param {Number} value
-     */
-    send(name: string | number, value: any) {
-        if (!this._inited) {
-            console.warn('counter is not inited');
+Counter.prototype.sendBatchRequest = function () {
+    var data = JSON.stringify(this._countersBatchData);
 
-            return;
-        }
+    this._countersBatchData = [];
+    this._counterTimerId = null;
 
-        clearTimeout(this._counterTimerId);
+    var sendBeaconPostAvailable = navigator.sendBeacon,
+        sendBeaconResult = sendBeaconPostAvailable && navigator.sendBeacon(this.counterUrl, new Blob([data], { type: 'application/json' }));
 
-        if (!this._indexes[name]) {
-            this._indexes[name] = 0;
-        }
-
-        var counterData = {
-            counterId: this.guid,
-            requestId: this.reqid,
-            page: this.page,
-            name: name,
-            value: value,
-            index: this._indexes[name],
-            additional: this.additional
-        },
-            self = this;
-
-        this._countersBatchData.push(counterData);
-
-        this._indexes[name]++;
-
-        if (this._countersBatchData.length < MAX_BATCH_COUNTERS) {
-            this._counterTimerId = setTimeout(function () {
-                self.sendBatchRequest();
-            }, COUNTERS_BATCH_TIMEOUT);
-        } else {
-            sendBatchRequest();
-        }
-    }
-
-    private sendBatchRequest() {
-        var data = JSON.stringify(this._countersBatchData);
-
-        this._countersBatchData = [];
-        this._counterTimerId = null;
-
-        var sendBeaconPostAvailable = navigator.sendBeacon,
-            sendBeaconResult = sendBeaconPostAvailable && navigator.sendBeacon(this.counterUrl, new Blob([data], { type: 'application/json' }));
-
-        if (!sendBeaconResult) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', this.counterUrl);
-            xhr.send(data);
-        }
+    if (!sendBeaconResult) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', this.counterUrl);
+        xhr.send(data);
     }
 }
 
-export default new Counter(
-    API_KEY,
-    String(Math.random()).substr(2, 12),
-    PAGE_NAME
-)
+
+export default Counter

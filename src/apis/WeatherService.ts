@@ -1,5 +1,4 @@
 import { WeatherListItem, IWeatherData } from '../types'
-import counter from './send'
 import weatherDataJSON from './weatherData.json'
 
 class WeatherService {
@@ -10,7 +9,8 @@ class WeatherService {
         const res = await fetch(this.BASE_URL + query)
 
         if (res.ok) {
-            counter.increase('количество просмотренных прогнозов погоды')
+            // @ts-ignore
+            window.counter.increase('forecastsViewed')
             const weatherData = await res.json()
             return weatherData
         }
