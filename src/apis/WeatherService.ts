@@ -2,16 +2,11 @@ import { WeatherListItem, IWeatherData } from '../types'
 import weatherDataJSON from './weatherData.json'
 
 class WeatherService {
-    private static BASE_URL: string = 'https://community-open-weather-map.p.rapidapi.com/forecast?lang=ru&units=metric&'
+    private static BASE_URL: string = 'https://api.openweathermap.org/data/2.5/forecast?lang=ru&units=metric&appid=5b7c2d94dfe2f4c130db1821aec8f1f9'
     private static isDummyData = false
 
     private static async fetchWeather(query: string) {
-        const res = await fetch(this.BASE_URL + query, {
-            "headers": {
-                "x-rapidapi-key": "eb194c61cdmsh690666316ffae94p1ca362jsn7379733fcfa0",
-                "x-rapidapi-host": "community-open-weather-map.p.rapidapi.com"
-            }
-        })
+        const res = await fetch(this.BASE_URL + query)
 
         if (res.ok) {
             const weatherData = await res.json()

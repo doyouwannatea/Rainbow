@@ -4,12 +4,17 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 
 import { IError, IWeatherData } from '../types'
 import WeatherService from '../apis/WeatherService'
+import { Counter } from '../apis/send'
 import { NavbarContext, DarkModeContext, FetchingContext, WeatherDataContext } from '../context'
 
 import DayPage from './DayPage'
 import Header from './Header'
 import Navbar from './Navbar'
 import WeatherList from './WeatherList'
+
+const counter = new Counter('88102c53-842f-4ee0-bdcb-eab697e6bd25', String(Math.random()).substr(2, 12), 'send test')
+
+counter.send('метрика на радуге', 20)
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -20,6 +25,12 @@ const App = () => {
   const [error, setError] = useState<IError>({ isError: false, message: '' })
 
   const { name, weatherList } = weatherData
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', () => {
+
+    })
+  }, [])
 
   useEffect(() => {
     if (navigator.geolocation) {
